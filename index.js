@@ -42,7 +42,6 @@ const searchName = "John";
 Person.find({ name: searchName })
 	.then((people) => {
 		console.log(`People with the name ${searchName}:`, people);
-		// Your stuff here
 	})
 	.catch((err) => {
 		console.error(err);
@@ -56,10 +55,117 @@ Person.findOne({ favoriteFoods: searchFood })
 	.then((person) => {
 		if (person) {
 			console.log(`Person with ${searchFood} in favorites:`, person);
-			// Your stuff here
 		} else {
 			console.log(`No person found with ${searchFood} in favorites.`);
 		}
+	})
+	.catch((err) => {
+		console.error(err);
+	});
+
+// Specify the person's _id to search for
+const personId = "654d15f76a4d5b0a1d3f6567"; // Replace with the _id you want to search for
+
+// Find the person with the specified _id
+Person.findById(personId)
+	.then((person) => {
+		if (person) {
+			console.log("Person found:", person);
+		} else {
+			console.log("No person found with the specified _id.");
+		}
+	})
+	.catch((err) => {
+		console.error(err);
+	});
+
+// Find the person by _id
+Person.findById(personId)
+	.then((person) => {
+		if (person) {
+			// Add "hamburger" to the list of favoriteFoods
+			person.favoriteFoods.push("hamburger");
+
+			// Mark favoriteFoods as modified
+			person.markModified("favoriteFoods");
+
+			// Save the updated person
+			return person.save();
+		} else {
+			console.log("No person found with the specified _id.");
+			return null;
+		}
+	})
+	.then((updatedPerson) => {
+		if (updatedPerson) {
+			console.log("Person updated successfully:", updatedPerson);
+			// Your stuff here
+		}
+	})
+	.catch((err) => {
+		console.error(err);
+	});
+
+// Specify the person's name to search for
+const personName = "John";
+
+// Update the person's age to 20
+Person.findOneAndUpdate(
+	{ name: personName },
+	{ $set: { age: 20 } },
+	{ new: true } // Return the updated document
+)
+	.then((updatedPerson) => {
+		if (updatedPerson) {
+			console.log("Person updated successfully:", updatedPerson);
+			// Your stuff here
+		} else {
+			console.log(`No person found with the name ${personName}.`);
+		}
+	})
+	.catch((err) => {
+		console.error(err);
+	});
+
+const personDeleteId = "654d15f76a4d5b0a1d3f6567"; // Replace with the actual _id you want to delete
+
+// Find and remove the person by _id
+Person.findByIdAndRemove(personDeleteId)
+	.then((removedPerson) => {
+		if (removedPerson) {
+			console.log("Person removed successfully:", removedPerson);
+			// Your stuff here
+		} else {
+			console.log("No person found with the specified _id.");
+		}
+	})
+	.catch((err) => {
+		console.error(err);
+	});
+
+// Specify the name to search for and delete
+const targetName = "Mary";
+
+// Remove all people with the specified name
+Person.deleteMany({ name: targetName })
+	.then((result) => {
+		console.log(`Removed all people with the name ${targetName}.`);
+		console.log("Deletion result:", result);
+		// Your stuff here
+	})
+	.catch((err) => {
+		console.error(err);
+	});
+
+// Find people who like burritos
+Person.find({ favoriteFoods: "burritos" })
+	.sort({ name: 1 }) // Sort by name in ascending order
+	.limit(2) // Limit the results to two documents
+	.select({ age: 0 }) // Hide the age field
+	.exec()
+	.then((data) => {
+		console.log("People who like burritos:", data);
+		// Your stuff here
 	})
 	.catch((err) => {
 		console.error(err);
