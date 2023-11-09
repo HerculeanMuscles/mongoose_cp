@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
 import Person from "./model/Person.js";
+import "dotenv/config.js";
 
-mongoose.connect(
-	"mongodb+srv://fahry657:test@cluster0.yw1oke1.mongodb.net/abcde?retryWrites=true&w=majority"
-);
+mongoose.connect(process.env.DB_URL);
 
 // const newPerson = new Person({
 // 	name: "John Doe",
